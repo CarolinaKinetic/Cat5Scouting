@@ -820,7 +820,7 @@ angular.module('cat5scouting.controllers', ['ngCordova'])
 
       //Create file name that includes the date the file was created
       //TODO: Add the tablet that the data came from
-      var pitFilename = "Cat5Scouting.Pit." + $scope.getDateString() + ".txt";
+      var pitFilename = "3489.Cat5Scouting.Pit." + $scope.getDateString() + ".txt";
       var filePath = "file:///storage/emulated/0/";
 
       //create the file to write to
