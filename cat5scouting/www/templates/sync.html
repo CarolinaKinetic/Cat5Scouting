@@ -1,26 +1,109 @@
-<ion-view view-title="Sync with Server">
-  <ion-content class="padding">
-    <h3 class="padding">
-      This is the button for importing the team roster and match 
-      schedule. Before tapping this button, make sure that you 
-      have copied over the match schedule text file from the 
-      laptop to the tablet's root directory.
-    </h3>
-    <button 
-      class="button button-block button-positive padding"
-      ng-click="importTeamData()">
-      Import Teams
-    </button>
-  	<h3 class="padding">
-  		When the data manager asks you to export your data, 
-  		this is the button to use. There is no need to export 
-  		after each match (in fact, that makes life harder for 
-  		the data manager... and we like our data managers happy).
-  	</h3>
-    <button 
-      class="button button-block button-positive padding"
-      ng-click="exportData()">
-      Export Data
-    </button>
-  </ion-content>
-</ion-view>
+
+<!DOCTYPE html>
+<html>
+<script src="lib/angular-local-storage/dist/angular-local-storage.js"></script>
+
+    <head>
+ 
+        <title> </title>
+    </head>
+    <body>
+<body ng-app="starter" ng-controller="TodoCtrl" >
+    
+    </body>
+    
+</html>
+.controller('TodoCtrl', function($scope, $ionicModal, localStorageService) {
+  // Set variable
+  $scope.shouldShowDelete = false;
+
+  // Get tasks from local storage
+  if (localStorageService.get('taskData')) {
+      $scope.tasks = localStorageService.get('taskData');
+  } else {
+      $scope.tasks = [];
+  }
+
+  // Create and load the Modal
+  $ionicModal.fromTemplateUrl('new-task.html', function(modal) {
+    $scope.taskModal = modal;
+  }, {
+    scope: $scope,
+    animation: 'slide-in-up'
+  });
+
+
+  // Called when the form is submitted
+  $scope.createTask = function(task) {
+    $scope.tasks.push({
+      title: task.title
+    });
+    localStorageService.set('taskData', $scope.tasks);
+    $scope.taskModal.hide();
+    task.title = "";
+  };
+  
+  // Delete a task
+  $scope.deleteTask = function(task) {
+    var index = $scope.tasks.indexOf(task);
+    if (index > -1) {
+      $scope.tasks.splice(index, 1);
+      localStorageService.set('taskData', $scope.tasks);
+    }
+  };
+
+  // Move task to a new position
+  $scope.moveTask = function(task, fromIndex, toIndex) {
+    $scope.tasks.splice(fromIndex, 1);
+    $scope.tasks.splice(toIndex, 0, task);
+    localStorageService.set('taskData', $scope.tasks);
+  };
+
+  // Open new task modal
+  $scope.newTask = function() {
+    $scope.taskModal.show();
+  };
+
+  // Close new task modal
+  $scope.closeNewTask = function() {
+    $scope.taskModal.hide();
+  };
+})
+ <script id="new-task.html" type="text/ng-template">
+  <div class="modal">
+  
+    <!-- Modal header bar -->
+    <ion-header-bar class="bar-secondary">
+      <h1 class="title">New Task</h1>
+      <button class="button button-clear button-positive" ng-click="closeNewTask()">Cancel</button>
+    </ion-header-bar>
+   <button class="button button-icon" ng-click="shouldShowDelete = !shouldShowDelete">
+  <i class="ion-ios-minus-outline"></i>
+ </button>
+ <h1 class="title">toplay>/h1>
+ <button class="button button-icon" ng-click="newTask()">
+  <i class="icon ion-compose"></i>
+ </button>
+    <!-- Modal content area -->
+    <ion-content>
+      <form ng-submit="createTask(task)">
+        <div class="list">
+          <label class="item item-input">
+            <input type="text" placeholder="What do you need to do?" ng-model="task.title" autofocus>
+          </label>
+        </div>
+        <div class="padding">
+          <button type="submit" class="button button-block button-positive">Create Task</button>
+        </div>
+      </form>
+    </ion-content>
+     <ion-list show-delete="shouldShowDelete" show-reorder="true">
+  <ion-item ng-repeat="task in tasks">
+    {{task.title}}
+    <ion-option-button class="button-assertive icon ion-android-checkbox-outline" ng-click="deleteTask(task)"></ion-option-button>
+    <ion-delete-button class="ion-minus-circled" ng-click="tasks.splice($index, 1)"></ion-delete-button>
+    <ion-reorder-button class="ion-navicon" on-reorder="moveTask(task, $fromIndex, $toIndex)"></ion-reorder-button>
+  </ion-item>
+ </ion-list>
+  </div>
+ </script>
