@@ -1,7 +1,7 @@
 # Category 5 First Robotics Competition (FRC) Scouting Mobile App
 
 ## What is the app's intended use?
-The Cat5 Scout app is a flexible, simple-to-use, and powerful mobile app that 
+The Cat5 Scout app is an awesome, simple-to-use, and powerful mobile app that 
 helps you gather, compile, measure, and act upon data collected by the 
 students in your First Robotics Competition team. 
 
